@@ -1,19 +1,26 @@
 import os
-
 from pathlib import Path
 from typing import ClassVar, Callable, Any, Type, Iterable, Optional
 
 import pydantic as pd
-from omegaconf import OmegaConf, DictConfig, Resolver, Container
+from omegaconf import OmegaConf, DictConfig, Resolver
 from pydantic import BaseModel
 
 from src.infra.repositories.mongodb.configuration import MongodbConfiguration
+from src.utils.configs.env_config import ENV_CONFIG
 from src.utils.enums import EnvType
 
 
-class Configuration(BaseModel):
+class ServerConfig(BaseModel):
+    port: int = 8000
+    reload: bool = False
+    debug: bool = False
+
+
+class AppConfiguration(BaseModel):
     env: EnvType
     mongodb: MongodbConfiguration
+    server: ServerConfig
 
 
 class ConfigManager:
@@ -22,10 +29,10 @@ class ConfigManager:
     resolvers: ClassVar[dict[str, "Resolver"]] = {}
 
     @classmethod
-    def load_configuration(cls, env: Optional[EnvType] = None, as_dict: bool = True) -> dict | ConfigurationV2:
+    def load_configuration(cls, env: Optional[EnvType] = None, as_dict: bool = False) -> dict | AppConfiguration:
         if env == EnvType.TEST:
             working_dir_path = os.getcwd()
-            source_path = working_dir_path.split('tests')[0]
+            source_path = working_dir_path.split("tests")[0]
             config: DictConfig = cls._load_many(
                 (
                     Path(f"{source_path}/.env.base.yaml"),
@@ -54,7 +61,7 @@ class ConfigManager:
     def _convert(cls, config: DictConfig, as_dict: bool = True):
         if as_dict:
             return cls._as_dict(config)
-        return pd.parse_obj_as(ConfigurationV2, cls._as_dict(config)[cls.CONFIGURATION_KEY])
+        return pd.parse_obj_as(AppConfiguration, cls._as_dict(config)[cls.CONFIGURATION_KEY])
 
     @classmethod
     def register_resolvers(cls):
@@ -100,3 +107,6 @@ for class_type in (
         int, str, float, Path
 ):
     create_type_resolver(f"as_{class_type.__name__.lower()}", class_type)
+
+
+APP_CONFIG: AppConfiguration = ConfigManager.load_configuration(ENV_CONFIG)

@@ -3,18 +3,14 @@ from abc import abstractmethod, ABC
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-import pymongo
 from bson import CodecOptions
 from motor.motor_asyncio import AsyncIOMotorClient
 
 if TYPE_CHECKING:
     from src.infra.repositories.mongodb.configuration import MongodbConfiguration
-    from pymongo.collection import Collection as MongoCollection
-    from pymongo.database import Database as MongoDatabase
     from motor.motor_asyncio import AsyncIOMotorDatabase, AsyncIOMotorCollection
 
 
-MONGODB_ID: str = "_id"
 LOG = logging.getLogger(__name__)
 
 
@@ -36,15 +32,12 @@ class MongodbRepository(ABC):
     async def close(self):
         await self._client.close()
 
-    @abstractmethod
     async def put(self, key, value):
         pass
 
-    @abstractmethod
     async def get(self, key):
         pass
 
-    @abstractmethod
     async def initialize(self):
         pass
 
