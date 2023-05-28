@@ -1,5 +1,5 @@
 import logging
-from abc import abstractmethod, ABC
+from abc import ABC
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
@@ -21,7 +21,7 @@ class MongodbRepository(ABC):
     _collection: "AsyncIOMotorCollection"
 
     @classmethod
-    async def instance(cls, config: MongodbConfiguration) -> "MongodbRepository":
+    async def instance(cls, config: "MongodbConfiguration") -> "MongodbRepository":
         _client: "AsyncIOMotorClient" = await cls._configure_client(config)
         _db: "AsyncIOMotorDatabase" = _client.get_database(config.db)
         _collection: "AsyncIOMotorCollection" = _db.get_collection(
@@ -30,7 +30,8 @@ class MongodbRepository(ABC):
         return cls(_client=_client, _db=_db, _collection=_collection)
 
     async def close(self):
-        await self._client.close()
+        self._client.close()
+        LOG.info("MongoDB connection closed")
 
     async def put(self, key, value):
         pass

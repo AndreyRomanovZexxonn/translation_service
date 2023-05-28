@@ -11,6 +11,6 @@ if TYPE_CHECKING:
 def build_router_v1(context: "Context") -> APIRouter:
     api_router = APIRouter()
     api_router.include_router(
-        router=create_translations_router(), prefix="translations"
+        router=create_translations_router(), prefix="/translations"
     )
     return api_router

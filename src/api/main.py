@@ -18,21 +18,8 @@ if TYPE_CHECKING:
 
 
 app: FastAPI = create_api()
+
 LOG = logging.getLogger(__name__)
-
-
-async def add_middlewares(application: FastAPI, context: "Context"):
-    # --- CORS ---
-    from starlette.middleware.cors import CORSMiddleware
-    allow_origins = ["*"]
-    LOG.info(f"Allowed CORS {allow_origins}")
-    application.add_middleware(
-        CORSMiddleware,
-        allow_origins=allow_origins,
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
 
 
 @app.on_event("startup")
@@ -41,9 +28,7 @@ async def startup():
     context = await Context.instance(config=APP_CONFIG)
     set_context(context)
     await context.open()
-    await add_middlewares(app, context=context)
     app.include_router(build_main_router(context))
-    context.app = app
 
 
 @app.on_event("shutdown")
@@ -58,6 +43,5 @@ if __name__ == "__main__":
         "src.api.main:app",
         port=APP_CONFIG.server.port,
         reload=APP_CONFIG.server.reload,
-        debug=APP_CONFIG.server.debug,
-        log_config=None,
+        log_config=None
     )

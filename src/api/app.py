@@ -6,6 +6,8 @@ from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import JSONResponse, PlainTextResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
+from src.api.middlewares import add_middlewares
+
 if TYPE_CHECKING:
     pass
 
@@ -15,8 +17,7 @@ LOG = logging.getLogger(__name__)
 
 def create_api() -> FastAPI:
     app = FastAPI()
-
-    app.add_middleware(GZipMiddleware)
+    add_middlewares(application=app)
 
     @app.exception_handler(Exception)
     async def exception_handler(request, exc):
