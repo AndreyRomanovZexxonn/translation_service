@@ -1,0 +1,25 @@
+version: "3.9"
+services:
+  mongodb:
+    image: mongo:6.0.6-nanoserver
+    container_name: mongodb
+    restart: unless-stopped
+    environment: # set required env variables to access mongo
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+    ports:
+      - "127.0.0.1:27017:27017"
+
+  # Mongo Express Service
+  mongo-express:
+    image: mongo-express:latest # latest image
+    container_name: mongo-express
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: password
+      ME_CONFIG_MONGODB_SERVER: mongodb
+      # use the name of the mongo container above for server env var.
+      # In our case this is mongodb
