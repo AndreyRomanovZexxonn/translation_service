@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "translation-service"
+version = "0.1.0"
+description = ""
+authors = ["zexxonn <zexxonn@gmail.com>"]
+readme = "README.md"
+packages = [{include = "translation_service"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.95.2"
+aiohttp = "^3.8.4"
+motor = "^3.1.2"
+uvloop = "^0.17.0"
+omegaconf = "^2.3.0"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.3.1"
+pytest-asyncio = "^0.21.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
