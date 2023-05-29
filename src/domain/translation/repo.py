@@ -35,7 +35,7 @@ class TranslationRepository(ABC):
         pass
 
     @abstractmethod
-    async def insert(self, translation: "Translation") -> "Translation":
+    async def insert(self, translation: "Translation"):
         pass
 
     @abstractmethod
@@ -43,7 +43,7 @@ class TranslationRepository(ABC):
         pass
 
     @abstractmethod
-    async def delete(self, word: str) -> "Translation":
+    async def delete(self, word: str):
         pass
 
     @abstractmethod
@@ -51,7 +51,8 @@ class TranslationRepository(ABC):
             self,
             word: str,
             order: SortOrder,
-            pagination: PaginationParams
+            pagination: PaginationParams,
+            exclude_synonyms: bool = False
     ) -> Iterable["Translation"]:
         pass
 

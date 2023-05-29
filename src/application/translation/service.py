@@ -27,6 +27,7 @@ class TranslationService:
 
     async def translate(self, word: str, to_lang: str) -> Optional["Translation"]:
         if translation := await self.translation_repo.get(word=word):
+            LOG.debug(f"Translation for `{word}` found in db cache")
             return translation
 
         if translation := await self.translation_provider.translate(

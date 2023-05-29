@@ -30,6 +30,7 @@ class ListRequestDTO(BaseModel):
     word: str = Field(min_length=1)
     order: SortOrder = SortOrder.ASC
     pagination: PaginationParams = Field(default_factory=lambda: PaginationParams())
+    exclude_synonyms: bool = True
 
 
 def create_translations_router() -> APIRouter:
@@ -81,7 +82,10 @@ def create_translations_router() -> APIRouter:
         context: Context = Depends(ctx)
     ) -> list[Translation]:
         translations: Iterable[Translation] = await context.translation_service.translation_repo.find(
-            word=request.word, order=request.order, pagination=request.pagination
+            word=request.word,
+            order=request.order,
+            pagination=request.pagination,
+            exclude_synonyms=request.exclude_synonyms
         )
         return list(translations)
 
