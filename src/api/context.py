@@ -2,7 +2,10 @@ import logging
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Optional
 
-from src.infra.repositories.mongodb.repository import MongodbRepository
+from src.application.translation.service import TranslationService
+from src.domain.translation.repo import TranslationRepository
+from src.infra.provider.google_web import GoogleWebTranslationProvider
+from src.infra.repositories.translation.repo import MongoDBTranslationRepository
 from src.utils.configs.app_config import AppConfiguration
 from src.utils.enums import EnvType
 
@@ -15,20 +18,30 @@ if TYPE_CHECKING:
 @dataclass
 class Context:
     env: EnvType
-    translation_repo: MongodbRepository
+    translation_service: "TranslationService"
 
     @classmethod
     async def instance(cls, config: AppConfiguration):
+        translation_repo = await MongoDBTranslationRepository.instance(
+            config=config
+        )
+        translation_provider = await GoogleWebTranslationProvider.instance(
+            config=config
+        )
+        translation_service = TranslationService(
+            translation_repo=translation_repo,
+            translation_provider=translation_provider
+        )
         return cls(
             env=config.env,
-            translation_repo=await MongodbRepository.instance(config=config.mongodb)
+            translation_service=translation_service
         )
 
     async def open(self):
-        await self.translation_repo.initialize()
+        await self.translation_service.initialize()
 
     async def close(self):
-        await self.translation_repo.close()
+        await self.translation_service.close()
 
     async def __aenter__(self):
         await self.open()
