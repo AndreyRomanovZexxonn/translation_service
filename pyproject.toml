@@ -15,6 +15,9 @@ uvloop = "^0.17.0"
 omegaconf = "^2.3.0"
 coloredlogs = "^15.0.1"
 uvicorn = "^0.22.0"
+aiogoogle = "^5.3.0"
+google-cloud-translate = "^3.11.1"
+googletrans = "4.0.0-rc1"
 
 
 [tool.poetry.group.dev.dependencies]
