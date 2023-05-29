@@ -72,7 +72,7 @@ class MongoDBTranslationRepository(TranslationRepository):
             ordering = pymongo.ASCENDING
 
         cursor = self._collection.find(
-            {"$text": {"$search": word}},
+            {WORD: {"$regex": f".*{word}.*"}},
             projection=projection
         ).limit(
             pagination.limit
