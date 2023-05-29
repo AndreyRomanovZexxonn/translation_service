@@ -1,6 +1,6 @@
 import logging
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Iterable
+from typing import TYPE_CHECKING, Iterable, Optional
 
 from bson import CodecOptions
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -37,6 +37,9 @@ class MongoDBTranslationRepository(TranslationRepository):
             config.mongodb.collection, codec_options=CodecOptions(tz_aware=True)
         )
         return cls(_client=_client, _db=_db, _collection=_collection)
+
+    async def get(self, word: str) -> Optional["Translation"]:
+        pass
 
     async def insert(self, translation: "Translation") -> "Translation":
         pass

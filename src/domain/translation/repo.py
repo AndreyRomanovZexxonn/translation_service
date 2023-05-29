@@ -18,8 +18,11 @@ class SortOrder(AutoName):
 
 
 class PaginationParams(BaseModel):
-    marker: str = Field(min_length=1)
-    limit: int = Field(gt=-1)
+    marker: Optional[str]
+    limit: int = Field(
+        gt=-1, default=0,
+        description="Limit number of found words. 0 - means no limit."
+    )
 
 
 @dataclass
