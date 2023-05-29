@@ -28,3 +28,16 @@ motor-types = "^1.0.0b2"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+
+[tool.pytest.ini_options]
+minversion = "2.0"
+addopts = ""
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["*Test", "Test*"]
+python_functions = ["test_*"]
+testpaths = ["tests"]
+pythonpath = "."
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+]
