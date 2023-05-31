@@ -2,7 +2,6 @@ import logging
 from typing import TYPE_CHECKING
 
 from fastapi import FastAPI
-from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import JSONResponse, PlainTextResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 

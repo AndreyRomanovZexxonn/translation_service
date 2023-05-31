@@ -1,5 +1,6 @@
 import pytest
 
+from src.infra.provider.google.web.constants import Lang
 from src.infra.provider.google.web.models import GoogleTranslatedWord
 from src.infra.provider.google.web.translator import Translator
 
@@ -8,8 +9,7 @@ from src.infra.provider.google.web.translator import Translator
 async def test_google_web_provider():
     translator = Translator()
     results = []
-    for word in ["привет", "пока"]:
-        result: GoogleTranslatedWord = await translator.translate(word, dest='en', src='auto')
-        results.append(result)
+    result: GoogleTranslatedWord = await translator.translate("challenge", dest=Lang.RU)
+    results.append(result)
 
     assert results

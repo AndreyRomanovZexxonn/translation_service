@@ -4,13 +4,15 @@ import random
 from typing import TYPE_CHECKING
 
 import httpx
+from fastapi import HTTPException
 from starlette import status
+from tenacity import stop_after_attempt, AsyncRetrying, RetryError, wait_fixed
 
 from src.infra.provider.google.web import urls
 from src.infra.provider.google.web.constants import (
     DEFAULT_CLIENT_SERVICE_URLS,
     DEFAULT_FALLBACK_SERVICE_URLS,
-    DEFAULT_USER_AGENT, LANGCODES, LANGUAGES, SPECIAL_CASES
+    DEFAULT_USER_AGENT, LANGUAGES, Lang
 )
 from src.infra.provider.google.web.gtoken import TokenAcquirer
 from src.infra.provider.google.web.models import GoogleTranslatedWord, TranslatedPart
@@ -18,7 +20,6 @@ from src.infra.provider.google.web.models import GoogleTranslatedWord, Translate
 if TYPE_CHECKING:
     from httpx._types import ProxiesTypes
 
-EXCLUDES = ('en', 'ca', 'fr')
 
 RPC_ID = 'MkEWBc'
 LOG = logging.getLogger(__name__)
@@ -90,11 +91,11 @@ class Translator:
             )
 
     @classmethod
-    def _build_rpc_request(cls, text: str, dest: str, src: str):
+    def _build_rpc_request(cls, text: str, dest: Lang, src: str):
         return json.dumps([[
             [
                 RPC_ID,
-                json.dumps([[text, src, dest, True], [None]], separators=(',', ':')),
+                json.dumps([[text, src, dest.value, True], [None]], separators=(',', ':')),
                 None,
                 'generic',
             ],
@@ -105,7 +106,7 @@ class Translator:
             return self.service_urls[0]
         return random.choice(self.service_urls)
 
-    async def _translate(self, text: str, dest: str, src: str):
+    async def _call_translate(self, text: str, dest: Lang, src: str):
         url = urls.TRANSLATE_RPC.format(host=self._pick_service_url())
         data = {
             'f.req': self._build_rpc_request(text, dest, src),
@@ -136,26 +137,14 @@ class Translator:
 
     @classmethod
     def _prepare_src(cls, src: str) -> str:
-        src = src.lower().split('_', 1)[0]
         if src != 'auto' and src not in LANGUAGES:
-            if src in SPECIAL_CASES:
-                src = SPECIAL_CASES[src]
-            elif src in LANGCODES:
-                src = LANGCODES[src]
-            else:
-                raise ValueError('invalid source language')
+            raise ValueError('invalid source language')
         return src
 
     @classmethod
-    def _prepare_dest(cls, dest: str) -> str:
-        dest = dest.lower().split('_', 1)[0]
+    def _prepare_dest(cls, dest: Lang) -> Lang:
         if dest not in LANGUAGES:
-            if dest in SPECIAL_CASES:
-                dest = SPECIAL_CASES[dest]
-            elif dest in LANGCODES:
-                dest = LANGCODES[dest]
-            else:
-                raise ValueError('invalid destination language')
+            raise ValueError('invalid destination language')
         return dest
 
     @classmethod
@@ -183,12 +172,28 @@ class Translator:
                 break
         return resp
 
-    async def translate(self, text: str, dest="en", src="auto") -> GoogleTranslatedWord:
-        dest = self._prepare_dest(dest)
-        src = self._prepare_src(src)
+    async def translate(
+            self, text: str, dest: Lang = Lang.EN, src: str = "auto"
+    ) -> GoogleTranslatedWord:
+        try:
+            async for attempt in AsyncRetrying(stop=stop_after_attempt(3), wait=wait_fixed(1)):
+                with attempt:
+                    return await self._translate(text=text, dest=dest, src=src)
+        except RetryError:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail={"code": "FAILED_TO_TRANSLATE"}
+            )
+
+    async def _translate(
+            self, text: str, dest: Lang = Lang.EN, src: str = "auto"
+    ) -> GoogleTranslatedWord:
+
+        dest: Lang = self._prepare_dest(dest)
+        src: str = self._prepare_src(src)
 
         origin = text
-        response_data, response = await self._translate(text, dest, src)
+        response_data, response = await self._call_translate(text, dest, src)
 
         resp: str = self._parse_translation_response(response_data)
         data: list = json.loads(resp)
@@ -235,10 +240,12 @@ class Translator:
             text=translated, pronunciation=pronunciation,
             parts=translated_parts,
             extra_data=extra_data,
-            synonyms=GoogleTranslatedWord.synonyms_from_parsed_data(parsed)
+            translations=GoogleTranslatedWord.translations_from_parsed_data(parsed),
+            definitions=GoogleTranslatedWord.definitions_from_parsed_data(parsed),
+            examples=GoogleTranslatedWord.examples_from_parsed_data(parsed),
         )
         LOG.debug(
             f"Translated {result.origin} -> {result.text}, "
-            f"lang {result.src} -> {result.dest}, synonyms={result.synonyms}"
+            f"lang {result.src} -> {result.dest}, synonyms={result.translations}"
         )
         return result

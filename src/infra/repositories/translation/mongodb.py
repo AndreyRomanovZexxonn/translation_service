@@ -11,7 +11,7 @@ from pymongo import TEXT
 from src.domain.translation.repo import (
     TranslationRepository, SortOrder, PaginationParams
 )
-from src.domain.translation.translation import Translation, WORD, SYNONYMS
+from src.domain.translation.translation import Translation, WORD, TRANSLATIONS, DEFINITIONS, EXAMPLES
 from src.utils.configs.app_config import AppConfiguration
 
 if TYPE_CHECKING:
@@ -54,26 +54,34 @@ class MongoDBTranslationRepository(TranslationRepository):
 
     async def find(
             self,
-            word: str,
+            word: Optional[str],
             order: SortOrder,
             pagination: PaginationParams,
-            exclude_synonyms: bool = True
+            exclude_translations: bool = True,
+            exclude_definitions: bool = True,
+            exclude_examples: bool = True
     ) -> Iterable["Translation"]:
 
-        batch_size = 1000
-        if exclude_synonyms:
-            projection = {SYNONYMS: 0}
-        else:
-            projection = None
+        projection = {}
+        if exclude_translations:
+            projection[TRANSLATIONS] = 0
+        if exclude_definitions:
+            projection[DEFINITIONS] = 0
+        if exclude_examples:
+            projection[EXAMPLES] = 0
 
         if order is SortOrder.DESC:
             ordering = pymongo.DESCENDING
         else:
             ordering = pymongo.ASCENDING
 
+        query = {WORD: {"$gt": pagination.marker}}
+        if word:
+            query[WORD]["$regex"] = f".*{word}.*"
+
+        batch_size = 1000
         cursor = self._collection.find(
-            {WORD: {"$regex": f".*{word}.*"}},
-            projection=projection
+            query, projection=projection
         ).limit(
             pagination.limit
         ).sort(WORD, ordering)
@@ -91,7 +99,9 @@ class MongoDBTranslationRepository(TranslationRepository):
         LOG.info("MongoDB: connection closed")
 
     async def initialize(self):
-        index = await self._collection.create_index([(WORD, TEXT), ], unique=True, background=True)
+        index = await self._collection.create_index(
+            [(WORD, TEXT), (WORD, pymongo.ASCENDING)], unique=True, background=True
+        )
         LOG.info(f"MongoDB: creating index `{index}` on `{WORD}` field")
 
     @classmethod

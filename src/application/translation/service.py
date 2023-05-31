@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, Optional
 
 from src.domain.translation.translation import Translation
+from src.infra.provider.google.web.constants import Lang
 
 if TYPE_CHECKING:
     from src.domain.translation.repo import TranslationRepository
@@ -25,13 +26,13 @@ class TranslationService:
         await self.translation_repo.initialize()
         await self.translation_provider.initialize()
 
-    async def translate(self, word: str, to_lang: str) -> Optional["Translation"]:
+    async def translate(self, word: str, dst_lang: Lang) -> Optional["Translation"]:
         if translation := await self.translation_repo.get(word=word):
             LOG.debug(f"Translation for `{word}` found in db cache")
             return translation
 
         if translation := await self.translation_provider.translate(
-                word=word, to_lang=to_lang
+                word=word, dst_lang=dst_lang
         ):
             await self.translation_repo.insert(translation)
             return translation

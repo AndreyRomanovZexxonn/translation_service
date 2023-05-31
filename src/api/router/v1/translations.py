@@ -10,6 +10,7 @@ from starlette.responses import JSONResponse
 from src.api.context import ctx, Context
 from src.domain.translation.repo import SortOrder, PaginationParams
 from src.domain.translation.translation import Translation
+from src.infra.provider.google.web.constants import Lang
 
 if TYPE_CHECKING:
     pass
@@ -19,7 +20,7 @@ LOG = logging.getLogger(__name__)
 
 class TranslationRequestDTO(BaseModel):
     word: str = Field(min_length=1)
-    to_lang: str = Field(min_length=1)
+    to_lang: Lang
 
 
 class DeleteRequestDTO(BaseModel):
@@ -30,7 +31,9 @@ class ListRequestDTO(BaseModel):
     word: str = Field(min_length=1)
     order: SortOrder = SortOrder.ASC
     pagination: PaginationParams = Field(default_factory=lambda: PaginationParams())
-    exclude_synonyms: bool = True
+    exclude_translations: bool = True
+    exclude_definitions: bool = True
+    exclude_examples: bool = True
 
 
 def create_translations_router() -> APIRouter:
@@ -45,7 +48,7 @@ def create_translations_router() -> APIRouter:
         context: Context = Depends(ctx)
     ) -> Translation:
         translation: Translation = await context.translation_service.translate(
-            word=request.word, to_lang=request.to_lang
+            word=request.word, dst_lang=request.to_lang
         )
         if translation:
             return translation
@@ -85,7 +88,9 @@ def create_translations_router() -> APIRouter:
             word=request.word,
             order=request.order,
             pagination=request.pagination,
-            exclude_synonyms=request.exclude_synonyms
+            exclude_translations=request.exclude_translations,
+            exclude_definitions=request.exclude_definitions,
+            exclude_examples=request.exclude_examples
         )
         return list(translations)
 

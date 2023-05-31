@@ -18,7 +18,7 @@ class SortOrder(AutoName):
 
 
 class PaginationParams(BaseModel):
-    marker: Optional[str]
+    marker: str = ""
     limit: int = Field(
         gt=-1, default=0,
         description="Limit number of found words. 0 - means no limit."
@@ -52,7 +52,9 @@ class TranslationRepository(ABC):
             word: str,
             order: SortOrder,
             pagination: PaginationParams,
-            exclude_synonyms: bool = False
+            exclude_translations: bool = True,
+            exclude_definitions: bool = True,
+            exclude_examples: bool = True
     ) -> Iterable["Translation"]:
         pass
 

@@ -3,6 +3,7 @@ from typing import Optional
 
 from pydantic import BaseModel, Field
 
+from src.infra.provider.google.web.constants import Lang
 from src.utils.enums import AutoLowerName
 
 
@@ -11,12 +12,23 @@ class PartOfSpeech(AutoLowerName):
     ADVERB = auto()
     CONJUNCTION = auto()
     NOUN = auto()
+    VERB = auto()
 
 
-Synonyms = dict[PartOfSpeech, dict[str, list[str]]]
+class Definition(BaseModel):
+    text: str
+    example: Optional[str]
+    tags: Optional[list[str]]
+    synonyms: Optional[list[str]]
+
+
+Translations = dict[PartOfSpeech, dict[str, list[str]]]
+Definitions = dict[PartOfSpeech, list[Definition]]
 
 WORD = "word"
-SYNONYMS = "synonyms"
+TRANSLATIONS = "translations"
+DEFINITIONS = "definitions"
+EXAMPLES = "examples"
 
 
 class Translation(BaseModel):
@@ -24,9 +36,11 @@ class Translation(BaseModel):
     word_lang: Optional[str]
 
     translation: str
-    translation_lang: str = Field(default="en", const=True)
+    translation_lang: Lang = Lang.EN
 
-    synonyms: Optional[Synonyms] = Field(alias=SYNONYMS)
+    translations: Optional[Translations] = Field(alias=TRANSLATIONS)
+    definitions: Optional[Definitions] = Field(alias=DEFINITIONS)
+    examples: Optional[list[str]] = Field(alias=EXAMPLES)
 
     class Config:
         allow_population_by_field_name = False

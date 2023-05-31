@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, Optional
 
 from src.application.translation.service import TranslationService
 from src.infra.provider.google.web.provider import GoogleWebTranslationProvider
-from src.infra.repositories.translation.repo import MongoDBTranslationRepository
+from src.infra.repositories.translation.mongodb import MongoDBTranslationRepository
 from src.utils.configs.app_config import AppConfiguration
 from src.utils.enums import EnvType
 
