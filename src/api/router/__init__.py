@@ -11,6 +11,6 @@ if TYPE_CHECKING:
 
 def build_main_router(context: "Context") -> APIRouter:
     api_router = APIRouter()
-    api_router.include_router(router=build_router_healthcheck(), prefix="/healthcheck")
-    api_router.include_router(router=build_router_v1(context), prefix="/api/v1")
+    api_router.include_router(router=build_router_v1(context), prefix="/api/v1", tags=["API"])
+    api_router.include_router(router=build_router_healthcheck(), prefix="/healthcheck", tags=["Utils"])
     return api_router

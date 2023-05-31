@@ -1,11 +1,16 @@
+import asyncio
+import json
+from pathlib import Path
+from pprint import pformat
 from typing import TYPE_CHECKING
 
 import pytest
 from httpx import AsyncClient
+from humanfriendly.text import random_string
 from starlette import status
 
 from src.api.app import create_api
-from src.api.context import set_context
+from src.api.context import set_context, Context
 from src.api.router import build_main_router
 from src.utils.configs.app_config import AppConfiguration, ConfigManager
 from src.utils.enums import EnvType
@@ -20,12 +25,18 @@ def app() -> "FastAPI":
 
 
 @pytest.fixture(scope="module")
+def event_loop():
+    loop = asyncio.new_event_loop()
+    yield loop
+    loop.close()
+
+
+@pytest.fixture(scope="module")
 async def context(app: "FastAPI", monkeymodule):
     env_type = EnvType.TEST
     monkeymodule.setenv("ENV", env_type.value)
     app_config: AppConfiguration = ConfigManager.load_configuration(env=env_type)
-    from src.api.context import Context
-    context = await Context.instance(config=app_config)
+    context = await Context.instance(config=app_config, app=app)
     set_context(context, overwrite=True)
     await context.open()
     app.include_router(build_main_router(context))
@@ -33,11 +44,20 @@ async def context(app: "FastAPI", monkeymodule):
     await context.close()
 
 
-@pytest.mark.asyncio
 @pytest.fixture(scope="module")
-async def api_client(app: "FastAPI") -> AsyncClient:
-    async with AsyncClient(app=app, base_url="http://test") as ac:
+@pytest.mark.asyncio
+async def api_client(context: "Context") -> AsyncClient:
+    async with AsyncClient(app=context.app, base_url="http://test") as ac:
         yield ac
+
+
+@pytest.fixture(scope="session")
+def translated_words() -> dict[str, dict]:
+    return {
+        "challenge": json.loads(
+            (Path(__file__).parent / "translation_challenge.json").read_text()
+        )
+    }
 
 
 @pytest.mark.asyncio
@@ -49,6 +69,19 @@ async def test_healthcheck(api_client: AsyncClient):
 
 
 @pytest.mark.asyncio
-async def test_healthcheck__(api_client: AsyncClient):
-    print("")
-    assert True is True
+async def test_delete_unknown_word(api_client: AsyncClient):
+    response = await api_client.post(
+        "/api/v1/translations/delete", json={"word": random_string(10)}
+    )
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+
+
+@pytest.mark.asyncio
+async def test_translate(api_client: AsyncClient, translated_words: dict[str, dict]):
+    word = "challenge"
+    response = await api_client.post(
+        "/api/v1/translations/translate", json={"word": word, "to_lang": "ru"}
+    )
+    assert response.status_code == status.HTTP_200_OK
+    data: dict = response.json()
+    assert translated_words[word] == data, pformat(data)

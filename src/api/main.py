@@ -25,7 +25,7 @@ LOG = logging.getLogger(__name__)
 @app.on_event("startup")
 async def startup():
     from src.api.context import Context
-    context = await Context.instance(config=APP_CONFIG)
+    context = await Context.instance(config=APP_CONFIG, app=app)
     set_context(context)
     await context.open()
     app.include_router(build_main_router(context))

@@ -11,16 +11,17 @@ from src.utils.enums import EnvType
 LOG = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
-    pass
+    from fastapi import FastAPI
 
 
 @dataclass
 class Context:
     env: EnvType
     translation_service: "TranslationService"
+    app: "FastAPI"
 
     @classmethod
-    async def instance(cls, config: AppConfiguration):
+    async def instance(cls, config: AppConfiguration, app: "FastAPI"):
         translation_repo = await MongoDBTranslationRepository.instance(
             config=config
         )
@@ -33,7 +34,8 @@ class Context:
         )
         return cls(
             env=config.env,
-            translation_service=translation_service
+            translation_service=translation_service,
+            app=app
         )
 
     async def open(self):
