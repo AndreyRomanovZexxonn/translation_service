@@ -1,1 +1,7 @@
 service-account.json
+.idea
+.venv
+.pytest_cache
+.python-version
+**/__pycache__
+**/*.pyc

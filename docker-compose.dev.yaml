@@ -1,0 +1,25 @@
+version: "3.9"
+services:
+  mongodb:
+    image: mongo:6.0.6-jammy
+    container_name: mongodb
+    restart: unless-stopped
+    environment: # set required env variables to access mongo
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+    ports:
+      - "127.0.0.1:27017:27017"
+
+  translator:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    command: poetry run uvicorn src.api.main:app --host=0.0.0.0 --port 8000
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      MONGODB_URL: mongodb://mongodb:27017/
+      MONGODB_USER: root
+      MONGODB_PASSWORD: password
+      MONGODB_DATABASE: provider
+      MONGODB_COLLECTION: words
