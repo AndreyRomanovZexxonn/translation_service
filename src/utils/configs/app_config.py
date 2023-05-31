@@ -29,12 +29,22 @@ class ConfigManager:
 
     @classmethod
     def load_configuration(cls, env: Optional[EnvType] = None, as_dict: bool = False) -> dict | AppConfiguration:
-        config: DictConfig = cls._load_many(
-            (
-                Path(f"./configs/.env.base.yaml"),
-                env and Path(f"./configs/.env.{env.value}.yaml")
+        if env == EnvType.TEST:
+            working_dir_path = os.getcwd()
+            source_path = working_dir_path.split('tests')[0]
+            config: DictConfig = cls._load_many(
+                (
+                    Path(f"{source_path}/configs/.env.base.yaml"),
+                    Path(f"{source_path}/configs/.env.{env.value}.yaml")
+                )
             )
-        )
+        else:
+            config: DictConfig = cls._load_many(
+                (
+                    Path(f"./configs/.env.base.yaml"),
+                    env and Path(f"./configs/.env.{env.value}.yaml")
+                )
+            )
         return cls._convert(config, as_dict=as_dict)
 
     @classmethod

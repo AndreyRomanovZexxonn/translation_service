@@ -10,9 +10,11 @@ if TYPE_CHECKING:
 def build_router_healthcheck() -> APIRouter:
     router = APIRouter()
 
-    @router.post(
-        "/"
-    )
+    @router.post("/")
+    async def healthcheck():
+        return JSONResponse(content={})
+
+    @router.get("/")
     async def healthcheck():
         return JSONResponse(content={})
 

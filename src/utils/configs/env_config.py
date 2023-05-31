@@ -5,7 +5,7 @@ from src.utils.enums import EnvType
 
 class EnvConfig(BaseSettings):
     log_level: str = Field(env="LOG_LEVEL", default="DEBUG")
-    env: EnvType = Field(env="ENV", default=EnvType.PROD)
+    env: EnvType = Field(env="ENV", default=EnvType.TEST)
 
 
 ENV_CONFIG = EnvConfig()

@@ -8,3 +8,6 @@ build:
 
 run_local_api:
 	ENV=test poetry run uvicorn src.api.main:app --host=0.0.0.0 --reload
+
+stats:
+	cloc $(git ls-files)
