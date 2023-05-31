@@ -9,7 +9,7 @@ from src.infra.provider.google.web.translator import Translator
 async def test_google_web_provider():
     translator = Translator()
     results = []
-    result: GoogleTranslatedWord = await translator.translate("challenge", dest=Lang.RU)
+    result: GoogleTranslatedWord = await translator.translate("channel", dest=Lang.RU)
     results.append(result)
 
     assert results

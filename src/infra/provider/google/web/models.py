@@ -45,7 +45,7 @@ class GoogleTranslatedWord(BaseModel):
                     if _synonyms := cls._flatten_iterables(other[-1]):
                         synonyms = list(_synonyms)
                 else:
-                    if _tags := cls._flatten_iterables(other[-1]):
+                    if other and (_tags := cls._flatten_iterables(other[-1])):
                         tags = list(_tags)
                 prepared_data[part_of_speech].append(
                     Definition(

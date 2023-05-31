@@ -147,31 +147,6 @@ class Translator:
             raise ValueError('invalid destination language')
         return dest
 
-    @classmethod
-    def _parse_translation_response(cls, data: str) -> str:
-        token_found = False
-        resp = ''
-        square_bracket_counts = [0, 0]
-        for line in data.split('\n'):
-            token_found = token_found or f'"{RPC_ID}"' in line[:30]
-            if not token_found:
-                continue
-
-            is_in_string = False
-            for index, char in enumerate(line):
-                if char == '\"' and line[max(0, index - 1)] != '\\':
-                    is_in_string = not is_in_string
-                if not is_in_string:
-                    if char == '[':
-                        square_bracket_counts[0] += 1
-                    elif char == ']':
-                        square_bracket_counts[1] += 1
-
-            resp += line
-            if square_bracket_counts[0] == square_bracket_counts[1]:
-                break
-        return resp
-
     async def translate(
             self, text: str, dest: Lang = Lang.EN, src: str = "auto"
     ) -> GoogleTranslatedWord:
@@ -194,7 +169,11 @@ class Translator:
 
         origin = text
         response_data, response = await self._call_translate(text, dest, src)
+        return self._parse_translation(response_data, origin=origin, dest=dest, src=src)
 
+    def _parse_translation(
+            self, response_data, origin: str, dest: Lang = Lang.EN, src: str = "auto"
+    ):
         resp: str = self._parse_translation_response(response_data)
         data: list = json.loads(resp)
         parsed: list = json.loads(data[0][2])
@@ -249,3 +228,28 @@ class Translator:
             f"lang {result.src} -> {result.dest}, synonyms={result.translations}"
         )
         return result
+
+    @classmethod
+    def _parse_translation_response(cls, data: str) -> str:
+        token_found = False
+        resp = ''
+        square_bracket_counts = [0, 0]
+        for line in data.split('\n'):
+            token_found = token_found or f'"{RPC_ID}"' in line[:30]
+            if not token_found:
+                continue
+
+            is_in_string = False
+            for index, char in enumerate(line):
+                if char == '\"' and line[max(0, index - 1)] != '\\':
+                    is_in_string = not is_in_string
+                if not is_in_string:
+                    if char == '[':
+                        square_bracket_counts[0] += 1
+                    elif char == ']':
+                        square_bracket_counts[1] += 1
+
+            resp += line
+            if square_bracket_counts[0] == square_bracket_counts[1]:
+                break
+        return resp
