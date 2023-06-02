@@ -1,9 +1,9 @@
 import logging
-from pydantic import Field
 from typing import TYPE_CHECKING, Iterable
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel
+from pydantic import Field
 from starlette import status
 from starlette.responses import JSONResponse
 
@@ -20,7 +20,7 @@ LOG = logging.getLogger(__name__)
 
 class TranslationRequestDTO(BaseModel):
     word: str = Field(min_length=1)
-    to_lang: Lang
+    to_lang: Lang = Lang.RU
 
 
 class DeleteRequestDTO(BaseModel):
@@ -39,13 +39,9 @@ class ListRequestDTO(BaseModel):
 def create_translations_router() -> APIRouter:
     router = APIRouter()
 
-    @router.post(
-        "/translate",
-        response_model=Translation
-    )
-    async def translate_word(
+    async def _translate_word(
         request: TranslationRequestDTO,
-        context: Context = Depends(ctx)
+        context: Context
     ) -> Translation:
         translation: Translation = await context.translation_service.translate(
             word=request.word, dst_lang=request.to_lang
@@ -57,6 +53,29 @@ def create_translations_router() -> APIRouter:
             status_code=status.HTTP_404_NOT_FOUND,
             detail={"code": "TRANSLATION_NOT_FOUND"}
         )
+
+    @router.get(
+        "/translate",
+        response_model=Translation
+    )
+    async def translate_word(
+        word: str = Query(min_length=1),
+        to_lang: Lang = Query(default=Lang.RU),
+        context: Context = Depends(ctx)
+    ) -> Translation:
+        return await _translate_word(
+            request=TranslationRequestDTO(word=word, to_lang=to_lang), context=context
+        )
+
+    @router.post(
+        "/translate",
+        response_model=Translation
+    )
+    async def translate_word(
+        request: TranslationRequestDTO,
+        context: Context = Depends(ctx)
+    ) -> Translation:
+        return await _translate_word(request=request, context=context)
 
     @router.post(
         "/delete"
