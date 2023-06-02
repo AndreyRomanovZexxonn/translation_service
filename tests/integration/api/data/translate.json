@@ -1,0 +1,141 @@
+{
+  "definitions":{
+    "verb":[
+      {
+        "example":"the German original has been translated into English",
+        "synonyms":[
+          "interpret",
+          "render",
+          "gloss",
+          "put",
+          "express",
+          "convert",
+          "change",
+          "construe",
+          "transcribe",
+          "transliterate"
+        ],
+        "tags":null,
+        "text":"express the sense of (words or text) in another language."
+      },
+      {
+        "example":"she had been translated from familiar surroundings to a foreign court",
+        "synonyms":[
+          "relocate",
+          "transfer",
+          "move",
+          "remove",
+          "shift",
+          "convey",
+          "transport",
+          "transplant"
+        ],
+        "tags":null,
+        "text":"move from one place or condition to another."
+      },
+      {
+        "example":null,
+        "synonyms":null,
+        "tags":[
+          "Physics"
+        ],
+        "text":"cause (a body) to move so that all its parts travel in the same direction, without rotation or change of shape."
+      }
+    ]
+  },
+  "translation":"переводить",
+  "translation_lang":"ru",
+  "translations":{
+    "verb":{
+      "излагать проще":[
+        "translate"
+      ],
+      "излагать яснее":[
+        "translate"
+      ],
+      "обновлять":[
+        "update",
+        "renew",
+        "renovate",
+        "innovate",
+        "refurbish",
+        "translate"
+      ],
+      "объяснять":[
+        "explain",
+        "account for",
+        "account",
+        "interpret",
+        "justify",
+        "translate"
+      ],
+      "осуществлять":[
+        "realize",
+        "implement",
+        "exercise",
+        "execute",
+        "fulfill",
+        "translate"
+      ],
+      "переводить":[
+        "transfer",
+        "translate",
+        "convert",
+        "move",
+        "interpret",
+        "put"
+      ],
+      "переводиться":[
+        "transfer",
+        "translate"
+      ],
+      "переделывать из старого":[
+        "translate"
+      ],
+      "перемещать":[
+        "move",
+        "transfer",
+        "shift",
+        "relocate",
+        "transport",
+        "translate"
+      ],
+      "переносить":[
+        "transfer",
+        "carry",
+        "transport",
+        "bear",
+        "stand",
+        "translate"
+      ],
+      "преобразовывать":[
+        "translate",
+        "reform",
+        "reorganize",
+        "transfashion",
+        "reorganise"
+      ],
+      "претворять в жизнь":[
+        "materialize",
+        "carry into effect",
+        "translate"
+      ],
+      "толковать":[
+        "interpret",
+        "read",
+        "explain",
+        "expound",
+        "translate",
+        "flap about"
+      ],
+      "транслировать":[
+        "translate",
+        "transmit",
+        "relay",
+        "compile"
+      ]
+    }
+  },
+  "word":"translate",
+  "word_lang":"en"
+}

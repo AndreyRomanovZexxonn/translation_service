@@ -77,8 +77,12 @@ class GoogleTranslatedWord(BaseModel):
             return None
 
     @classmethod
-    def examples_from_parsed_data(cls, data: list[list[list[Any]]]) -> list[str]:
-        return [item[1] for item in data[3][2][0]]
+    def examples_from_parsed_data(cls, data: list[list[list[Any]]]) -> Optional[list[str]]:
+        try:
+            examples_raw = data[3][2][0]
+        except (TypeError, IndexError):
+            return None
+        return [item[1] for item in examples_raw]
 
     @classmethod
     def _flatten_iterables(cls, value):

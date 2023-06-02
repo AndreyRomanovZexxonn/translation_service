@@ -55,7 +55,7 @@ def translated_words() -> dict[str, dict]:
         word: json.loads(
             (Path(__file__).parent / "data" / f"{word}.json").read_text()
         )
-        for word in ("string", "challenge", "chance", "hello")
+        for word in ("string", "challenge", "chance", "hello", "translate")
     }
 
 
@@ -78,6 +78,7 @@ async def test_delete_unknown_word(api_client: AsyncClient):
 @pytest.mark.asyncio
 @pytest.mark.parametrize(
     "word", (
+        "translate",
         "string",
         "challenge",
         "chance",
