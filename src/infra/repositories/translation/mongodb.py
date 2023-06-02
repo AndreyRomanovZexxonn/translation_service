@@ -32,7 +32,7 @@ class MongoDBTranslationRepository(TranslationRepository):
     _collection: "AsyncIOMotorCollection"
 
     @classmethod
-    async def instance(cls, config: "AppConfiguration") -> "TranslationRepository":
+    async def instance(cls, config: "AppConfiguration") -> "MongoDBTranslationRepository":
         _client: "AsyncIOMotorClient" = await cls._configure_client(config.mongodb)
         _db: "AsyncIOMotorDatabase" = _client.get_database(config.mongodb.db)
         _collection: "AsyncIOMotorCollection" = _db.get_collection(
@@ -55,13 +55,14 @@ class MongoDBTranslationRepository(TranslationRepository):
     async def find(
             self,
             word: Optional[str],
-            order: SortOrder,
-            pagination: PaginationParams,
+            order: SortOrder = SortOrder.ASC,
+            pagination: PaginationParams = None,
             exclude_translations: bool = True,
             exclude_definitions: bool = True,
             exclude_examples: bool = True
     ) -> Iterable["Translation"]:
 
+        pagination = pagination or PaginationParams()
         projection = {}
         if exclude_translations:
             projection[TRANSLATIONS] = 0

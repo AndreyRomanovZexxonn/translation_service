@@ -1,0 +1,217 @@
+{
+  "word":"challenge",
+  "word_lang":"en",
+  "translation":"испытание",
+  "translation_lang":"ru",
+  "translations":{
+    "noun":{
+      "вызов":[
+        "call",
+        "challenge",
+        "invocation",
+        "summons",
+        "defiance",
+        "dare"
+      ],
+      "проблема":[
+        "problem",
+        "issue",
+        "challenge",
+        "question",
+        "poser",
+        "proposition"
+      ],
+      "сложная задача":[
+        "challenge",
+        "floorer",
+        "egg-dance"
+      ],
+      "отвод":[
+        "tap",
+        "challenge",
+        "diversion",
+        "branch",
+        "bend",
+        "offset"
+      ],
+      "сомнение":[
+        "doubt",
+        "question",
+        "challenge",
+        "hesitation",
+        "discredit",
+        "query"
+      ],
+      "оклик":[
+        "hail",
+        "call",
+        "challenge",
+        "holla",
+        "hollo",
+        "holloa"
+      ],
+      "вызов на дуэль":[
+        "challenge"
+      ],
+      "опознавательные сигналы":[
+        "challenge"
+      ]
+    },
+    "verb":{
+      "оспаривать":[
+        "challenge",
+        "dispute",
+        "contest",
+        "contend",
+        "debate",
+        "litigate"
+      ],
+      "бросать вызов":[
+        "challenge",
+        "defy",
+        "affront",
+        "outdare",
+        "bid defiance to"
+      ],
+      "подвергать сомнению":[
+        "question",
+        "challenge",
+        "query",
+        "dispute",
+        "reflect on",
+        "reflect upon"
+      ],
+      "вызывать":[
+        "call",
+        "cause",
+        "induce",
+        "call forth",
+        "summon",
+        "challenge"
+      ],
+      "требовать":[
+        "require",
+        "demand",
+        "claim",
+        "ask",
+        "take",
+        "challenge"
+      ],
+      "окликать":[
+        "hail",
+        "holler",
+        "call",
+        "challenge",
+        "speak",
+        "hallo"
+      ],
+      "спрашивать пропуск":[
+        "challenge"
+      ],
+      "спрашивать пароль":[
+        "challenge"
+      ],
+      "сомневаться":[
+        "doubt",
+        "question",
+        "distrust",
+        "challenge",
+        "disbelieve",
+        "mistrust"
+      ],
+      "отрицать":[
+        "deny",
+        "negate",
+        "disavow",
+        "gainsay",
+        "disown",
+        "challenge"
+      ],
+      "давать отвод присяжным":[
+        "challenge"
+      ]
+    }
+  },
+  "definitions":{
+    "noun":[
+      {
+        "text":"a call to take part in a contest or competition, especially a duel.",
+        "example":"he accepted the challenge",
+        "tags":null,
+        "synonyms":[
+          "dare",
+          "provocation",
+          "summons"
+        ]
+      },
+      {
+        "text":"an objection or query as to the truth of something, often with an implicit demand for proof.",
+        "example":"a challenge to the legality of the order",
+        "tags":null,
+        "synonyms":[
+          "confrontation with",
+          "dispute with",
+          "stand against",
+          "test of",
+          "opposition",
+          "disagreement with",
+          "questioning of",
+          "defiance",
+          "ultimatum"
+        ]
+      },
+      {
+        "text":"exposure of the immune system to pathogenic organisms or antigens.",
+        "example":"recently vaccinated calves should be protected from challenge",
+        "tags":[
+          "Medicine"
+        ],
+        "synonyms":null
+      }
+    ],
+    "verb":[
+      {
+        "text":"invite (someone) to engage in a contest.",
+        "example":"he challenged one of my men to a duel",
+        "tags":null,
+        "synonyms":null
+      },
+      {
+        "text":"dispute the truth or validity of.",
+        "example":"employees challenged the company's requirement",
+        "tags":null,
+        "synonyms":[
+          "question",
+          "disagree with",
+          "object to",
+          "take exception to",
+          "confront",
+          "dispute",
+          "take issue with",
+          "protest against",
+          "call into question",
+          "demur about/against",
+          "dissent from",
+          "be a dissenter from"
+        ]
+      },
+      {
+        "text":"expose (the immune system) to pathogenic organisms or antigens.",
+        "example":null,
+        "tags":[
+          "Medicine"
+        ],
+        "synonyms":null
+      }
+    ]
+  },
+  "examples":[
+    "he accepted the <b>challenge</b>",
+    "I heard the <b>challenge</b> “Who goes there?”",
+    "he needed something both to <b>challenge</b> his skills and to regain his crown as the king of the thriller",
+    "a <b>challenge</b> to the legality of the order",
+    "the ridge is a <b>challenge</b> for experienced climbers",
+    "recently vaccinated calves should be protected from <b>challenge</b>",
+    "a world title <b>challenge</b>"
+  ]
+}

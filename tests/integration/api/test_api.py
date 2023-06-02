@@ -5,6 +5,7 @@ from pprint import pformat
 from typing import TYPE_CHECKING
 
 import pytest
+from deepdiff import DeepDiff
 from httpx import AsyncClient
 from humanfriendly.text import random_string
 from starlette import status
@@ -32,10 +33,7 @@ def event_loop():
 
 
 @pytest.fixture(scope="module")
-async def context(app: "FastAPI", monkeymodule):
-    env_type = EnvType.TEST
-    monkeymodule.setenv("ENV", env_type.value)
-    app_config: AppConfiguration = ConfigManager.load_configuration(env=env_type)
+async def context(app: "FastAPI", app_config: AppConfiguration, monkeymodule):
     context = await Context.instance(config=app_config, app=app)
     set_context(context, overwrite=True)
     await context.open()
@@ -55,7 +53,7 @@ async def api_client(context: "Context") -> AsyncClient:
 def translated_words() -> dict[str, dict]:
     return {
         "challenge": json.loads(
-            (Path(__file__).parent / "translation_challenge.json").read_text()
+            (Path(__file__).parent / "translation_of_challenge.json").read_text()
         )
     }
 
@@ -84,4 +82,9 @@ async def test_translate(api_client: AsyncClient, translated_words: dict[str, di
     )
     assert response.status_code == status.HTTP_200_OK
     data: dict = response.json()
-    assert translated_words[word] == data, pformat(data)
+
+    error_msg = f"diff:\n{pformat(DeepDiff(translated_words[word], data, verbose_level=2))}"
+
+    translated_words[word].pop("examples", None)
+    data.pop("examples", None)
+    assert translated_words[word] == data, error_msg

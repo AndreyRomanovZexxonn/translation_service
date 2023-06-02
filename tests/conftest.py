@@ -5,6 +5,9 @@ import time
 import coloredlogs
 import pytest
 
+from src.utils.configs.app_config import AppConfiguration, ConfigManager
+from src.utils.enums import EnvType
+
 
 @pytest.fixture(scope="session", autouse=True)
 def setup_logging():
@@ -44,3 +47,11 @@ def monkeymodule(request):
     mpatch = MonkeyPatch()
     yield mpatch
     mpatch.undo()
+
+
+@pytest.fixture(scope="session")
+def app_config(monkeysession) -> AppConfiguration:
+    env_type = EnvType.TEST
+    monkeysession.setenv("ENV", env_type.value)
+    app_config: AppConfiguration = ConfigManager.load_configuration(env=env_type)
+    return app_config
