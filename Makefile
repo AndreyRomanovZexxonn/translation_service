@@ -10,7 +10,10 @@ test: run_docker_test
 	poetry run pytest -vvv
 
 stats:
-	cloc $(git ls-files)
+	./scripts/stats.sh
+
+init:
+	poetry install
 
 run_docker_test:
 	docker compose -f ./docker-compose.test.yaml up -Vd
