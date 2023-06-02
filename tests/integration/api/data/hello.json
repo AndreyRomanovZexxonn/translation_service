@@ -1,0 +1,84 @@
+{
+  "word":"hello",
+  "word_lang":"en",
+  "translation":"привет",
+  "translation_lang":"ru",
+  "translations":{
+    "verb":{
+      "здороваться":[
+        "greet",
+        "hello",
+        "salute",
+        "hallo",
+        "hullo",
+        "bow"
+      ],
+      "звать":[
+        "call",
+        "invite",
+        "shout",
+        "hail",
+        "hallo",
+        "hello"
+      ],
+      "окликать":[
+        "hail",
+        "holler",
+        "call",
+        "challenge",
+        "speak",
+        "hello"
+      ]
+    },
+    "noun":{
+      "приветствие":[
+        "greeting",
+        "welcome",
+        "salute",
+        "salutation",
+        "hello",
+        "hail"
+      ],
+      "приветственный возглас":[
+        "hallo",
+        "halloa",
+        "hello",
+        "viva"
+      ],
+      "возглас удивления":[
+        "hallo",
+        "halloa",
+        "hello"
+      ]
+    }
+  },
+  "definitions":{
+    "exclamation":[
+      {
+        "text":"used as a greeting or to begin a phone conversation.",
+        "example":"hello there, Katie!",
+        "tags":null,
+        "synonyms":null
+      }
+    ],
+    "noun":[
+      {
+        "text":"an utterance of “hello”; a greeting.",
+        "example":"she was getting polite nods and hellos from people",
+        "tags":null,
+        "synonyms":null
+      }
+    ],
+    "verb":[
+      {
+        "text":"say or shout “hello”; greet someone.",
+        "example":"I pressed the phone button and helloed",
+        "tags":null,
+        "synonyms":null
+      }
+    ]
+  },
+  "examples":[
+    "<b>hello</b> there, Katie!"
+  ]
+}

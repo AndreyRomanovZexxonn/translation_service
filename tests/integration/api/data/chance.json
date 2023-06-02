@@ -1,0 +1,215 @@
+{
+  "word":"chance",
+  "word_lang":"en",
+  "translation":"шанс",
+  "translation_lang":"ru",
+  "translations":{
+    "noun":{
+      "шанс":[
+        "chance",
+        "break",
+        "potluck",
+        "hazard",
+        "look-in"
+      ],
+      "возможность":[
+        "opportunity",
+        "possibility",
+        "potential",
+        "capacity",
+        "ability",
+        "chance"
+      ],
+      "вероятность":[
+        "probability",
+        "likelihood",
+        "chance",
+        "possibility",
+        "credibility",
+        "likeliness"
+      ],
+      "случай":[
+        "happening",
+        "case",
+        "occasion",
+        "event",
+        "incident",
+        "chance"
+      ],
+      "случайность":[
+        "accident",
+        "accidental",
+        "chance",
+        "eventuality",
+        "happenstance",
+        "contingency"
+      ],
+      "риск":[
+        "risk",
+        "hazard",
+        "chance",
+        "peril",
+        "adventure",
+        "jeopardy"
+      ],
+      "удача":[
+        "fortune",
+        "luck",
+        "good luck",
+        "success",
+        "chance",
+        "piece of luck"
+      ],
+      "судьба":[
+        "fate",
+        "destiny",
+        "fortune",
+        "lot",
+        "luck",
+        "chance"
+      ],
+      "счастье":[
+        "happiness",
+        "luck",
+        "fortune",
+        "bliss",
+        "blessing",
+        "chance"
+      ]
+    },
+    "adjective":{
+      "случайный":[
+        "random",
+        "casual",
+        "accidental",
+        "chance",
+        "occasional",
+        "incidental"
+      ]
+    },
+    "verb":{
+      "рискнуть":[
+        "take a chance",
+        "chance",
+        "have a go at",
+        "go nap on"
+      ],
+      "случаться":[
+        "happen",
+        "occur",
+        "be",
+        "match",
+        "take place",
+        "chance"
+      ]
+    }
+  },
+  "definitions":{
+    "noun":[
+      {
+        "text":"a possibility of something happening.",
+        "example":"there is little chance of his finding a job",
+        "tags":null,
+        "synonyms":[
+          "possibility",
+          "prospect",
+          "probability",
+          "odds",
+          "likelihood",
+          "likeliness",
+          "expectation",
+          "anticipation",
+          "conceivability",
+          "feasibility",
+          "plausibility",
+          "risk",
+          "threat",
+          "menace",
+          "hazard",
+          "danger",
+          "fear",
+          "peril",
+          "liability",
+          "hope",
+          "opportunity",
+          "promise"
+        ]
+      },
+      {
+        "text":"the occurrence and development of events in the absence of any obvious design.",
+        "example":"he met his brother by chance",
+        "tags":null,
+        "synonyms":[
+          "accident",
+          "coincidence",
+          "serendipity",
+          "fate",
+          "a twist of fate",
+          "destiny",
+          "fortuity",
+          "fortune",
+          "providence",
+          "freak",
+          "hazard",
+          "a piece of good fortune",
+          "(a bit of) luck",
+          "(a bit of) good luck",
+          "a fluke",
+          "a happy chance",
+          "happenstance",
+          "fortuitously",
+          "by accident",
+          "accidentally",
+          "coincidentally",
+          "serendipitously",
+          "unintentionally",
+          "inadvertently",
+          "unwittingly",
+          "unknowingly",
+          "unawares",
+          "unconsciously"
+        ]
+      }
+    ],
+    "adjective":[
+      {
+        "text":"fortuitous; accidental.",
+        "example":"a chance meeting",
+        "tags":null,
+        "synonyms":null
+      }
+    ],
+    "verb":[
+      {
+        "text":"do something by accident or without design.",
+        "example":"if they chanced to meet",
+        "tags":null,
+        "synonyms":[
+          "happen"
+        ]
+      },
+      {
+        "text":"do (something) despite its being dangerous or of uncertain outcome.",
+        "example":"she waited a few seconds and chanced another look",
+        "tags":null,
+        "synonyms":[
+          "risk",
+          "hazard",
+          "venture",
+          "try",
+          "try one's luck with",
+          "essay",
+          "formal"
+        ]
+      }
+    ]
+  },
+  "examples":[
+    "a <b>chance</b> meeting",
+    "there is little <b>chance</b> of his finding a job",
+    "I gave her a <b>chance</b> to answer",
+    "a <b>chance</b> of victory",
+    "he met his brother by <b>chance</b>",
+    "what a lucky <b>chance</b> that you are here"
+  ]
+}

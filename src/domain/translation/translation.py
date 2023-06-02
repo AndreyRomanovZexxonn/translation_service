@@ -8,11 +8,16 @@ from src.utils.enums import AutoLowerName
 
 
 class PartOfSpeech(AutoLowerName):
-    PREPOSITION = auto()
-    ADVERB = auto()
-    CONJUNCTION = auto()
     NOUN = auto()
+    PRONOUN = auto()
     VERB = auto()
+    ADJECTIVE = auto()
+    ADVERB = auto()
+    PREPOSITION = auto()
+    CONJUNCTION = auto()
+    ABBREVIATION = auto()
+    INTERJECTION = auto()
+    EXCLAMATION = auto()
 
 
 class Definition(BaseModel):

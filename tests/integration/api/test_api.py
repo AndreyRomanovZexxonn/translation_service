@@ -52,9 +52,10 @@ async def api_client(context: "Context") -> AsyncClient:
 @pytest.fixture(scope="session")
 def translated_words() -> dict[str, dict]:
     return {
-        "challenge": json.loads(
-            (Path(__file__).parent / "translation_of_challenge.json").read_text()
+        word: json.loads(
+            (Path(__file__).parent / "data" / f"{word}.json").read_text()
         )
+        for word in ("string", "challenge", "chance", "hello")
     }
 
 
@@ -75,16 +76,26 @@ async def test_delete_unknown_word(api_client: AsyncClient):
 
 
 @pytest.mark.asyncio
-async def test_translate(api_client: AsyncClient, translated_words: dict[str, dict]):
-    word = "challenge"
+@pytest.mark.parametrize(
+    "word", (
+        "string",
+        "challenge",
+        "chance",
+        "hello",
+    )
+)
+async def test_translate(
+        api_client: AsyncClient,
+        translated_words: dict[str, dict],
+        word: str
+):
     response = await api_client.post(
         "/api/v1/translations/translate", json={"word": word, "to_lang": "ru"}
     )
     assert response.status_code == status.HTTP_200_OK
     data: dict = response.json()
 
-    error_msg = f"diff:\n{pformat(DeepDiff(translated_words[word], data, verbose_level=2))}"
-
     translated_words[word].pop("examples", None)
     data.pop("examples", None)
+    error_msg = f"diff:\n{pformat(DeepDiff(translated_words[word], data, verbose_level=2))}"
     assert translated_words[word] == data, error_msg

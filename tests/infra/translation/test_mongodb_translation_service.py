@@ -24,6 +24,19 @@ def challenge_raw_translation_data() -> str:
     """
 
 
+@pytest.fixture(scope="session")
+def chance_raw_translation_data() -> str:
+    return r"""
+")]}'
+
+104
+[["wrb.fr","MkEWBc",null,null,null,[13],"generic"],["di",32],["af.httprm",32,"7098306939635456246",5]]
+25
+[["e",4,null,null,140]]
+"
+    """
+
+
 @pytest.fixture(scope="function")
 def path_google_wep_translation_provider(
     challenge_raw_translation_data: str, mocker

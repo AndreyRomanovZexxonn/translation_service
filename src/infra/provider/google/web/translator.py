@@ -176,6 +176,7 @@ class Translator:
     ):
         resp: str = self._parse_translation_response(response_data)
         data: list = json.loads(resp)
+        LOG.debug(f"Translation parsed data: {data}")
         parsed: list = json.loads(data[0][2])
         should_spacing = parsed[1][0][0][3]
         translated_parts = list(map(
